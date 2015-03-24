@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author chenguangjian 2015Äê3ÔÂ15ÈÕ ÏÂÎç12:54:49
+ * @author chenguangjian 2015ï¿½ï¿½3ï¿½ï¿½15ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½12:54:49
  */
 public class Utils {
 	public static void main(String[] args) throws IOException {

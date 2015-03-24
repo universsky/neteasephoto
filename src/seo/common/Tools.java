@@ -29,6 +29,7 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
@@ -40,60 +41,8 @@ public class Tools {
 	public static void main(String[] args) throws ClientProtocolException,
 			IOException {
 		String url = "http://blog.51cto.com/artcommend";
-		driverGet(url);
-	}
-
-	/**
-	 * 
-	 * @param url
-	 * @return
-	 */
-
-	public static String driverGet(String url) {
-
-		String html = null;
-
-		// ��ָ��·����
-		System.setProperty(
-				"webdriver.firefox.bin",
-				"D:\\XMLRPC\\Firefox_Portable_33.1.1\\FirefoxPortable\\App\\Firefox\\firefox.exe");
-		DesiredCapabilities capabilities = DesiredCapabilities.firefox();
-		FirefoxProfile firefoxprofile = new FirefoxProfile(
-				new File(
-						"D:\\XMLRPC\\Firefox_Portable_33.1.1\\FirefoxPortable\\Data\\profile\\"));
-		capabilities.setCapability(FirefoxDriver.PROFILE, firefoxprofile);
-
-		WebDriver driver = new FirefoxDriver(capabilities);
-		// ���Եȴ�
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
-		// set browser window size
-		Dimension targetSize = new Dimension(0, 0);
-		// driver.manage().window().setSize(targetSize);
-		// set browser position
-		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit()
-				.getScreenSize();
-		Point targetPosition = new Point(screenSize.width, screenSize.height);
-		// driver.manage().window().setPosition(targetPosition);
-		// WebDriver driver = new InternetExplorerDriver();
-
-		try {
-
-			driver.get(url);
-			Thread.sleep(1000);
-			// ��ȡ��ǰ��ҳԴ��
-			html = driver.getPageSource();// ��ӡ��ҳԴ��
-
-		} catch (Exception e) {// ��ӡ��ջ��Ϣ
-			e.printStackTrace();
-		} finally {
-			try {// �رղ��˳�
-				driver.close();
-				driver.quit();
-			} catch (Exception e) {
-			}
-		}
-		return html;
+		// System.out.println(httpGet(url));
+		System.out.println(driverGet(url));
 	}
 
 	/**
@@ -290,6 +239,26 @@ public class Tools {
 		return result;
 	}
 
+	// /**
+	// * httpget
+	// *
+	// * @throws IOException
+	// * @throws ClientProtocolException
+	// */
+	// public static String httpGet(String url) throws ClientProtocolException,
+	// IOException {
+	// String result = "";
+	// HttpGet request = new HttpGet(url);
+	// HttpResponse response = HttpClients.createDefault().execute(request);
+	// System.out.println(response.getStatusLine().getStatusCode());
+	// if (response.getStatusLine().getStatusCode() == 200) {
+	// result = EntityUtils.toString(response.getEntity());
+	// System.out.println(result);
+	// }
+	// return result;
+	//
+	// }
+
 	/**
 	 * 
 	 * @param regex
@@ -305,13 +274,89 @@ public class Tools {
 		return matcher;
 	}
 
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 */
+
+	public static String driverGet(String url) {
+
+		String html = null;
+
+		// �ƹ�ͬһIP�������ʱ��ܾ�������
+		String PROXY1 = "60.191.95.104";// ������Ǳ�����localhost�滻��IP��ַ
+		String PROXY2 = "60.191.95.106";
+
+		String PROXY = Const.i / 2 == 0 ? PROXY1 : PROXY2;
+		Const.i++;
+
+		System.out.println(PROXY);
+
+		org.openqa.selenium.Proxy proxy = new org.openqa.selenium.Proxy();
+		proxy.setHttpProxy(PROXY).setFtpProxy(PROXY).setSslProxy(PROXY);
+		DesiredCapabilities cap = new DesiredCapabilities();
+
+		// ��ָ��·����
+		System.setProperty(
+				"webdriver.firefox.bin",
+				"D:\\XMLRPC\\Firefox_Portable_33.1.1\\FirefoxPortable\\App\\Firefox\\firefox.exe");
+		DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+		capabilities.setCapability(CapabilityType.PROXY, proxy);
+		capabilities
+				.setCapability(
+						"general.useragent.override",
+						"Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) ");
+
+		FirefoxProfile firefoxprofile = new FirefoxProfile(
+				new File(
+						"D:\\XMLRPC\\Firefox_Portable_33.1.1\\FirefoxPortable\\Data\\profile\\"));
+		capabilities.setCapability(FirefoxDriver.PROFILE, firefoxprofile);
+
+		WebDriver driver = new FirefoxDriver(capabilities);
+		// ���Եȴ�
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+		// set browser window size
+		Dimension targetSize = new Dimension(0, 0);
+		driver.manage().window().setSize(targetSize);
+		// set browser position
+		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit()
+				.getScreenSize();
+		Point targetPosition = new Point(screenSize.width, screenSize.height);
+		driver.manage().window().setPosition(targetPosition);
+
+		try {
+
+			driver.get(url);
+			Thread.sleep(5000);
+			// ��ȡ��ǰ��ҳԴ��
+			html = driver.getPageSource();// ��ӡ��ҳԴ��
+			// driver.wait(); //java.lang.IllegalMonitorStateException
+			// System.out.println(html);
+
+		} catch (Exception e) {// ��ӡ��ջ��Ϣ
+			e.printStackTrace();
+		} finally {
+			try {// �رղ��˳�
+				driver.close();
+				driver.quit();
+			} catch (Exception e) {
+			}
+		}
+		return html;
+	}
+
 	public static void wait4About1Min() {
 		int randInt = (int) (new Random().nextInt(20));
 		long start = System.currentTimeMillis();
+		// System.out.println("START: " + start);
 		long end = System.currentTimeMillis() + (50 + randInt) * 1000;
+		// System.out.println("END: " + end);
 		while (System.currentTimeMillis() < end) {
 			;
 		}
+		// System.out.println("CURRENT: " + System.currentTimeMillis());
 	}
 
 }

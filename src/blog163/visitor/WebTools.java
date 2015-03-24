@@ -28,7 +28,7 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
- * @author chenguangjian 2015Äê3ÔÂ15ÈÕ ÉÏÎç2:36:25
+ * @author chenguangjian 2015ï¿½ï¿½3ï¿½ï¿½15ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½2:36:25
  */
 public class WebTools {
 
@@ -44,7 +44,7 @@ public class WebTools {
 		// WebTools webTools = new WebTools();
 		//
 		// webTools.driverGet(url);
-		// // ´ò¿ªÖ¸¶¨Â·¾¶µÄ
+		// // ï¿½ï¿½Ö¸ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½
 		System.setProperty(Messages.getString("WebTools.RV1"), //$NON-NLS-1$
 				Messages.getString("WebTools.RV2")); //$NON-NLS-1$
 		DesiredCapabilities capabilities = DesiredCapabilities.firefox();
@@ -63,7 +63,7 @@ public class WebTools {
 
 	public void driverGet(String url) throws InterruptedException {
 
-		// ´ò¿ªÖ¸¶¨Â·¾¶µÄ
+		// ï¿½ï¿½Ö¸ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½
 		System.setProperty(Messages.getString("WebTools.RV1"), //$NON-NLS-1$
 				Messages.getString("WebTools.RV2")); //$NON-NLS-1$
 		DesiredCapabilities capabilities = DesiredCapabilities.firefox();
@@ -110,6 +110,7 @@ public class WebTools {
 
 			for (String e : hrefs) {
 				driver.navigate().to(e);
+				System.out.println("Count:" + (count++));
 				driverGet(e);
 			}
 			// driver.close();
@@ -119,10 +120,10 @@ public class WebTools {
 			// driverGet(e);
 			// }
 
-		} catch (Exception e) {// ´òÓ¡¶ÑÕ»ÐÅÏ¢
+		} catch (Exception e) {// ï¿½ï¿½Ó¡ï¿½ï¿½Õ»ï¿½ï¿½Ï¢
 			e.printStackTrace();
 		} finally {
-			try {// ¹Ø±Õ²¢ÍË³ö
+			try {// ï¿½Ø±Õ²ï¿½ï¿½Ë³ï¿½
 				driver.close();
 				driver.quit();
 			} catch (Exception e) {
@@ -179,10 +180,10 @@ public class WebTools {
 				// driverGet(e, driver);// here recursive call , out of memory
 			}
 
-		} catch (Exception e) {// ´òÓ¡¶ÑÕ»ÐÅÏ¢
+		} catch (Exception e) {// ï¿½ï¿½Ó¡ï¿½ï¿½Õ»ï¿½ï¿½Ï¢
 			e.printStackTrace();
 		} finally {
-			try {// ¹Ø±Õ²¢ÍË³ö
+			try {// ï¿½Ø±Õ²ï¿½ï¿½Ë³ï¿½
 					// driver.close();
 					// driver.quit();
 			} catch (Exception e) {

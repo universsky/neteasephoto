@@ -27,25 +27,38 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 public class BlogSender {
 
 	private static String updateRelationshipById(String blogid, String termid) {
+		// �B�Ӕ�����
+		// ����������
 		String driver = "com.mysql.jdbc.Driver";
-		String url = "jdbc:mysql://192.168.34.7:3306/ols?useUnicode=true&amp;characterEncoding=utf8";
-		String user = "jack";
-		String password = "isword";
+
+		// URLָ��Ҫ���ʵ����ݿ���scutcs
+		String url = "jdbc:mysql://localhost:3306/ols?useUnicode=true&amp;characterEncoding=utf8";
+
+		// MySQL����ʱ���û���
+		String user = "root";
+
+		// MySQL����ʱ������
+		String password = "";
 
 		try {
+			// ������������
 			Class.forName(driver);
 
+			// �������ݿ�
 			java.sql.Connection conn = DriverManager.getConnection(url, user,
 					password);
 			conn.setAutoCommit(false);// Disables auto-commit.
 			if (!conn.isClosed())
 				System.out.println("Succeeded connecting to the Database!");
 
+			// statement����ִ��SQL���
 			Statement statement = conn.createStatement();
 
+			// Ҫִ�е�SQL���
 			String sql = "update ols_term_relationships set term_taxonomy_id="
 					+ termid + " where object_id=" + blogid;
 			System.out.println(sql);
+			// �����
 			int rs = statement.executeUpdate(sql);
 			System.out.println(rs);
 			statement.close();
@@ -125,6 +138,7 @@ public class BlogSender {
 			e.printStackTrace();
 		}
 
+		// update cat
 		updateRelationshipById(blogId, String.valueOf(catId));
 		// client.executeAsync("metaWeblog.newPost", params, new
 		// EchoCallback());
@@ -154,16 +168,13 @@ public class BlogSender {
 			System.out.println("page:" + (i) + " " + pageUrl);
 
 			String html = Tools.driverGet(pageUrl);
-			System.out.println(html);
-
-			// get article urls and titles
-
+			// System.out.println(html);
 			ArrayList<String[]> articleUrlsTitles = BlogsDownloader
 					.getArticleUrlTitleByHtml(html, param);
-			System.out.println(articleUrlsTitles.size());
-			if (articleUrlsTitles.isEmpty()) {
+			if (null == articleUrlsTitles) {
 				continue;
 			}
+			System.out.println(articleUrlsTitles.size());
 
 			for (String[] urltitle : articleUrlsTitles) {
 				System.out.println(urltitle[0] + " " + urltitle[1]);

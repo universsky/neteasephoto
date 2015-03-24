@@ -49,41 +49,33 @@ public class BlogsDownloader {
 			System.out.println(articleUrlRegex);
 			System.out.println(articleUrlTitle);
 
-			int s = articleUrlTitle.indexOf(articleUrlStartIndex);
-			int t = articleUrlTitle.indexOf(articleUrlEndIndex);
+			int s = articleUrlTitle.indexOf(articleUrlStartIndex)
+					+ articleUrlStartOffset;
+			int e = articleUrlTitle.indexOf(articleUrlEndIndex)
+					- articleUrlEndOffset;
 
 			System.out.println("articleUrlStartIndex: " + s);
-			System.out.println("articleUrlEndIndex: " + t);
-
-			int start = s + articleUrlStartOffset;
-			int end = t - articleUrlEndOffset;
-
-			if (start > end || start == -1 || end == -1) {
+			System.out.println("articleUrlEndIndex: " + e);
+			if (s > e) {
 				continue;
 			}
 
-			String articleUrl = articleUrlTitle.substring(start, end);
+			String articleUrl = articleUrlTitle.substring(s, e);
 
-			System.out.println("articleUrl============" + articleUrl);
-
-			int titleStart = articleUrlTitle.indexOf(articleTitleStartIndex)
+			System.out.println(articleUrl);
+			int ss = articleUrlTitle.indexOf(articleTitleStartIndex)
 					+ articleTitleStartOffset;
-			int titleEnd = articleUrlTitle.indexOf(articleTitleEndIndex)
+			int ee = articleUrlTitle.indexOf(articleTitleEndIndex)
 					- articleTitleEndOffset;
 
-			System.out.println("titleStart: " + titleStart);
-			System.out.println("titleEnd: " + titleEnd);
-
-			if (titleStart > titleEnd || titleEnd == -1 || titleStart == -1) {
+			if (ss > ee) {
 				continue;
 			}
+			String articleTitle = articleUrlTitle.substring(ss, ee);
 
-			String articleTitle = articleUrlTitle.substring(titleStart,
-					titleEnd);
-
-			// System.out.println(articleTitle);
+			System.out.println(articleTitle);
 			// [0] url [1] title
-			// System.out.println(articleUrl + " " + articleTitle);
+			System.out.println(articleUrl + " " + articleTitle);
 			articleUrlsTitles.add(new String[] { articleUrl, articleTitle });
 		}
 
@@ -101,50 +93,53 @@ public class BlogsDownloader {
 	 */
 	public static String getArticleContentUseHttpGet(String url, String start,
 			String end) throws ClientProtocolException, IOException {
-		String result = Tools.httpGet(url);
+		String html = Tools.httpGet(url);
+		String content = "";
 
-		if (result != null) {
-			int startIndex = result.indexOf(start);
-			int endIndex = result.indexOf(end);
+		if (html != null) {
+			int startIndex = html.indexOf(start);
+			int endIndex = html.indexOf(end);
 
 			System.out.println(startIndex);
 			System.out.println(endIndex);
 
-			if (startIndex != -1 && endIndex != -1) {
-				result = result.substring(startIndex, endIndex);
-			} else {
-				result = "Out Of Index";
+			if (startIndex < endIndex) {
+				content = html.substring(startIndex, endIndex);
 			}
-		} else {
-			result = "NULL";
+
 		}
-		return result;
+		return content;
 
 	}
 
+	/**
+	 * 
+	 * @param url
+	 * @param start
+	 * @param end
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	public static String getArticleContentUseDriverGet(String url,
 			String start, String end) throws ClientProtocolException,
 			IOException {
-		String result = Tools.driverGet(url);
-		System.out.println(result);
-
-		if (result != null) {
-			int startIndex = result.indexOf(start);
-			int endIndex = result.indexOf(end);
+		String html = Tools.driverGet(url);
+		// System.out.println(html);
+		String content = "";
+		if (html != null) {
+			int startIndex = html.indexOf(start);
+			int endIndex = html.indexOf(end);
 
 			System.out.println(startIndex);
 			System.out.println(endIndex);
 
-			if (startIndex != -1 && endIndex != -1) {
-				result = result.substring(startIndex, endIndex);
-			} else {
-				result = "Out Of Index";
+			if (startIndex < endIndex) {
+				content = html.substring(startIndex, endIndex);
 			}
-		} else {
-			result = "NULL";
-		}
-		return result;
 
+		}
+		return content;
 	}
 
 }
